@@ -73,7 +73,7 @@ Future<File?> getAabFile(String path) async {
     var file = File(path);
     var isExists = await file.exists();
     if (!isExists) {
-      logError('File not exists.');
+      logError('File not exists. \'$path\'');
     } else {
       logMessage(
         'File readed ${file.path.split('/').last} (${getFileSizeString(bytes: await file.length(), decimals: 2)})',
@@ -81,7 +81,7 @@ Future<File?> getAabFile(String path) async {
       return file;
     }
   } catch (e) {
-    logError('File not found.');
+    logError('File not exists. \'$path\'');
     return null;
   }
   return null;
@@ -228,7 +228,7 @@ Future<Map<String, dynamic>?> readServiceAccountJson(String path) async {
     var jsonString = await File(path).readAsString();
     return jsonDecode(jsonString);
   } catch (e) {
-    logError('Service account file could not readed.');
+    logError('Service account file could not readed. \'$path\'');
     return null;
   }
 }
@@ -260,5 +260,7 @@ void logMessage(Object? object) =>
     print('\x1B[32m[Google App Uploader]:\x1B[0m ${object.toString()}');
 void logWarning(Object? object) =>
     print('\x1B[33m[Google App Uploader]:\x1B[0m ${object.toString()}');
-void logError(Object? object) =>
-    print('\x1B[31m[Google App Uploader]:\x1B[0m ${object.toString()}');
+void logError(Object? object) {
+  print('\x1B[31m[Google App Uploader]:\x1B[0m ${object.toString()}');
+  exit(1);
+}
